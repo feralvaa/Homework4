@@ -52,7 +52,9 @@
         <!-- container Initial -->
         <div class="container">
             <div class="TitleClass" id="MainTitle"> Coding Quizz Challange </div>
+            <div class="TitleClass" style="visibility: hidden;">All Done! </div>
             <div class="Instructions" id="MainInstructions">Try to answer the following colde-related quesitons withing the time limit. Keep in midn that incorrect anwsers will pelalize your scoretime by ten seconds! </div>
+            <div class="Instrocutions" style="visibility: hidden;"> Your Final Score: <span Id="Score"></span> </div>
             <div style="text-align: center;">
                 <button type="button" class="btn btn-success" id="StartButton" >Start</button> 
             </div>    
@@ -153,6 +155,7 @@
 
 
             var questionsContainer = document.getElementById("question")
+            var score = 0
 
             // // generate questions
             function generateQuestion(questionNumber){
@@ -175,36 +178,39 @@
                 var answerQuizz=(e.target.getAttribute("data-answer-index"));
                 console.log(answerQuizz)
                 if (answerQuizz== questions[questionNumber].answer){
-                    console.log("correct")
-                    correct()
+                    correct() 
+                    score=score+1
                 }
-                incorrect()
-                elem.innerHTML = timeLeft -5
+                else {  incorrect()
+                    elem.innerHTML = timeLeft -5
+                }
                 
-
             })
 
+            var solutionAnwser = document.getElementById("solutionDiv")
             /* correct Function */
-            function correct() {
-                var solutionAnwser = document.getElementById("solutionDiv")
+            function correct() {    
+                
                 
                 solutionAnwser.innerText= "Correct!"               
                 $("#question").empty()
-                sleep(1000)
+                sleep(100)
                 solutionAnwser.innerText="Next Question"
-                currentQuestion=currentQuestion+1
+                console.log(currentQuestion)
+                currentQuestion++
+                console.log(currentQuestion)
                 generateQuestion(currentQuestion)
-                
             }
 
             function incorrect() {
-                var solutionAnwser = document.getElementById("solutionDiv")
+                
                 
                 solutionAnwser.innerText= "Incorrect!"               
                 $("#question").empty()
-                sleep(1000)
+                sleep(100)
                 solutionAnwser.innerText="Next Question"
-                currentQuestion=currentQuestion+1
+                currentQuestion++
+                console.log(currentQuestion)
                 generateQuestion(currentQuestion)
                 
             }
