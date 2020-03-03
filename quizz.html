@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <!-- bootsterap -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            .answerBtn {
+                display: block;
+                width: 200px;
+                margin: 10px;
+            }
+            .container {
+                padding-top: 5%;
+                padding-left: 15%;
+                padding-right: 15%;
+            }
+            .TitleClass {
+                text-align: center;
+                margin-bottom: 30px;
+                font-weight: bold;
+                font-size: 30px;
+            }
+            .Instructions {
+                text-align: center;
+                margin-bottom: 20px;    
+            }
+            .solutionClass{
+                text-align: left;
+                border-top-color: black;
+                font-size: 10px;
+                padding: 10px;
+            }
+            
+
+        </style>
+    </head>
+    <body>
+        <!-- header -->
+        <nav class="navbar">
+            <div class="col-md-2" > View High Scores </div>
+            <div class="col-md-9"></div>
+            <div class="col-md-1">Timer: <span id="CountDown">60</span> </div>
+        </nav>
+
+        <!-- container Initial -->
+        <div class="container">
+            <div class="TitleClass" id="MainTitle"> Coding Quizz Challange </div>
+            <div class="Instructions" id="MainInstructions">Try to answer the following colde-related quesitons withing the time limit. Keep in midn that incorrect anwsers will pelalize your scoretime by ten seconds! </div>
+            <div style="text-align: center;">
+                <button type="button" class="btn btn-success" id="StartButton" >Start</button> 
+            </div>    
+            <div id="question"></div>
+            <div id= "solutionDiv" class="solutionClass" >"" </div>
+            
+        </div>
+            
+       
+        <script>
+            /*  Variables */
+
+            var timeLeft = 60
+            var elem = document.getElementById('CountDown');
+            var StartBtn= document.getElementById("StartButton")
+            var TitleClassVar= document.getElementById("MainTitle")
+            var InstructionsVar= document.getElementById("MainInstructions")
+
+
+            /* countdown function */
+            function countdown() {
+                if (timeLeft == -1) {
+                    clearTimeout(timerId);
+                    doSomething();
+                } else {
+                    elem.innerHTML = timeLeft ;
+                    timeLeft--;
+                    /* need to call start the quiz */
+                }
+            }
+
+            /* end of quizz function */
+            function doSomething() {
+                alert("Hi");
+            }            
+
+            /* Begin program */
+            StartBtn.addEventListener("click",function() {
+                timerId = setInterval(countdown, 1000)
+                Hide()
+                generateQuestion(currentQuestion);
+            })
+
+            function Hide() {
+                TitleClassVar.style.display="none"
+                InstructionsVar.style.display="none"
+                StartBtn.style.display="none"
+            }
+            
+
+            
+          
+            
+            /* Generate Questions */
+
+            var currentQuestion = 0;
+            var questions = [
+                {
+                    question: "1what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                },
+                {
+                    question: "2what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                },
+                {
+                    question: "3what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                }
+                ,
+                {
+                    question: "4what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                }
+                ,
+                {
+                    question: "5what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                }
+                ,
+                {
+                    question: "6what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                }
+                ,
+                {
+                    question: "7what is this?",
+                    answers: ["a thing", "some stuff", "our parent context"],
+                    answer: 2
+                }
+            ];
+
+
+            var questionsContainer = document.getElementById("question")
+
+            // // generate questions
+            function generateQuestion(questionNumber){
+            // gernerate question element
+            
+            var questionElement = document.createElement("div");
+            var cardHeader = document.createElement("div");
+            // generate question
+            cardHeader.className = "TitleClass";
+            cardHeader.textContent = questions[questionNumber].question;
+            questionElement.appendChild(cardHeader);
+            questionElement.className = "Instructions";
+            //generate answers
+            var answers = document.createElement("div");
+            answers.className = "card-body";
+
+            // attach click event
+            answers.addEventListener("click", function(e){
+               
+                var answerQuizz=(e.target.getAttribute("data-answer-index"));
+                console.log(answerQuizz)
+                if (answerQuizz== questions[questionNumber].answer){
+                    console.log("correct")
+                    correct()
+                }
+                incorrect()
+                elem.innerHTML = timeLeft -5
+                
+
+            })
+
+            /* correct Function */
+            function correct() {
+                var solutionAnwser = document.getElementById("solutionDiv")
+                
+                solutionAnwser.innerText= "Correct!"               
+                $("#question").empty()
+                sleep(1000)
+                solutionAnwser.innerText="Next Question"
+                currentQuestion=currentQuestion+1
+                generateQuestion(currentQuestion)
+                
+            }
+
+            function incorrect() {
+                var solutionAnwser = document.getElementById("solutionDiv")
+                
+                solutionAnwser.innerText= "Incorrect!"               
+                $("#question").empty()
+                sleep(1000)
+                solutionAnwser.innerText="Next Question"
+                currentQuestion=currentQuestion+1
+                generateQuestion(currentQuestion)
+                
+            }
+
+            //gereate btn for each answer
+            questions[questionNumber].answers.forEach((answer, answerIndex ) => {
+                var answerBtn = document.createElement("div");
+                answerBtn.className = "btn btn-primary answerBtn";
+                answerBtn.setAttribute("data-answer-index", answerIndex);
+                answerBtn.textContent = answer;
+                answers.appendChild(answerBtn);
+            });
+            questionsContainer.appendChild(questionElement);
+            questionsContainer.appendChild(answers);
+            }
+
+            /* generate for each anwser */
+            /* sleep  */
+            function sleep(milliseconds) {
+            const date = Date.now();
+            let currentDate = null;
+            do {
+                currentDate = Date.now();
+            } while (currentDate - date < milliseconds);
+            }
+            
+
+        </script>
+    </body>
+</html>
